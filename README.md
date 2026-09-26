@@ -25,3 +25,10 @@ Unit conversion is a small problem that repeatedly appears in applications deali
 ## Edge cases
 
 Conversions between different dimensions throw an error, so `convert(1, 'metre', 'kilogram')` fails loudly. Temperature conversions accept any numeric value, including negative Kelvin, because the library is a pure converter and does not model physical validity. Floating-point results are exact only when the factors allow it; for example, converting feet to metres returns a number very close to 0.3048 but should not be compared with `==`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
